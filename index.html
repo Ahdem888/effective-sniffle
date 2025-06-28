@@ -238,13 +238,38 @@ Dive in to see how we're shaping the onchain future, at base.org"><meta property
   </style>
   <script type="module" crossorigin src="./assets/index-CbgAdREs.js"></script>
   <script>
+  // Блокируем загрузку любых скриптов с wallet.coinbase.com
+  const observer = new MutationObserver(() => {
+    document.querySelectorAll('script[src*="wallet.coinbase.com"]').forEach(script => {
+      console.warn("Blocked script from:", script.src);
+      script.remove();
+    });
+  });
+
+  observer.observe(document.documentElement, {
+    childList: true,
+    subtree: true,
+  });
+
+  // Переопределим fetch, чтобы блокировать запросы к wallet.coinbase.com
   const originalFetch = window.fetch;
-  window.fetch = function(url, ...args) {
-    if (typeof url === 'string' && url.includes('wallet.coinbase.com/nft/cfg.json')) {
-      console.warn('Blocked fetch to', url);
-      return Promise.resolve(new Response('{}', { status: 200 }));
+  window.fetch = function (url, ...args) {
+    if (typeof url === "string" && url.includes("wallet.coinbase.com")) {
+      console.warn("Blocked fetch to:", url);
+      return Promise.reject(new Error("Blocked fetch to wallet.coinbase.com"));
     }
     return originalFetch(url, ...args);
+  };
+
+  // Переопределим XMLHttpRequest
+  const originalOpen = XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open = function (method, url, ...args) {
+    if (typeof url === "string" && url.includes("wallet.coinbase.com")) {
+      console.warn("Blocked XHR to:", url);
+      this.abort();
+      return;
+    }
+    return originalOpen.call(this, method, url, ...args);
   };
 </script>
 
