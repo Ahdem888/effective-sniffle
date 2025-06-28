@@ -1,0 +1,5 @@
+{
+  "routes": [
+    { "src": "/api/discord-callback", "dest": "/api/discord-callback.js" }
+  ]
+}
