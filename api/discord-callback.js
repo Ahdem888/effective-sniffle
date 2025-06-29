@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
   const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
   const REDIRECT_URI = process.env.REDIRECT_URI;
-  const FRONTEND_URL = process.env.FRONTEND_URL || 'https://linea.safetydiscord.icu/';
+  const FRONTEND_URL = process.env.FRONTEND_URL || 'https://matrica-discord-monad.vercel.app/';
 
   const code = req.query.code;
 
